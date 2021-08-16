@@ -1,8 +1,25 @@
 var repoNameEl = document.querySelector("#repo-name");
 let issueContainerEl = document.querySelector("#issues-container");
 let limitWarningEl = document.querySelector("#limit-warning");
+let queryString =  document.location.search;
 
-let getrepoIssues = ((repo)=>{
+
+let getRepoName = function () {
+  let repoName = queryString.split("=")[1];
+  console.log(repoName);
+  getRepoIssues(repoName);
+  repoNameEl.textContent = repoName;
+
+  if(repoName) {
+    repoNameEl.textContent = repoName;
+    getRepoIssues(repoName);
+  } else { 
+    document.location.replace("./index.html");
+  }
+};
+
+
+let getRepoIssues = ((repo)=>{
   //format the github api url
   let apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
 
@@ -68,7 +85,7 @@ var displayIssues = function(issues) {
   
   var displayWarning = function(repo) {
     // add text to warning container
-    limitWarningEl.textContent = "To see more than 30 issues, visit ";
+    limitWarningEl.textContent = "To see more issues, visit ";
   
     // create link element
     var linkEl = document.createElement("a");
@@ -80,4 +97,4 @@ var displayIssues = function(issues) {
     limitWarningEl.appendChild(linkEl);
   };
 
-getrepoIssues("expressjs/express");
+  getRepoName()
